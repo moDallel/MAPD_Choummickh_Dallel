@@ -25,7 +25,7 @@ public class PetriNetwork implements IPetriNetwork {
 			LinkedList<ExitingArc> myExitingArc = t.getExitingArcList();
 			for ( EnteringArc a : myEnteringArc ) {
 				Place myPlace = a.getPlace() ;
-				a.setTokensNumber(a.getTokensNumber() + a.getWeight())
+				myPlace.setTokensNumber(myPlace.getTokensNumber() + a.getWeight())
 			}
 			return true;
 		}

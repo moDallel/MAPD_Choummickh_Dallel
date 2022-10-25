@@ -38,4 +38,9 @@ public class Place {
 			this.tokensNumber -- ;
 		}
 	}
+
+	public int getTokensNumber() {
+		// TODO Auto-generated method stub
+		return this.tokensNumber;
+	}
 }
