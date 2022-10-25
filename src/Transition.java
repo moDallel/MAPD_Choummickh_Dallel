@@ -1,6 +1,7 @@
 import java.util.LinkedList;
 
 public class Transition {
+	
 	private LinkedList<ExitingArc> exitingArcList; 
 	private LinkedList<EnteringArc> enteringArcList; 
 	
@@ -46,5 +47,13 @@ public class Transition {
 			}
 		}
 		
+	}
+
+	public LinkedList<EnteringArc> getEnteringArcList() {
+		return this.enteringArcList;
+	}
+
+	public LinkedList<ExitingArc> getExitingArcList() {
+		return this.exitingArcList;
 	}
 }

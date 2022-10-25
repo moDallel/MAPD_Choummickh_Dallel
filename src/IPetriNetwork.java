@@ -1,6 +1,7 @@
 import java.util.LinkedList;
 
 public interface IPetriNetwork {
+	
 	public LinkedList<Transition> firableTransitions();
 	public boolean fire(Transition t);
 	
