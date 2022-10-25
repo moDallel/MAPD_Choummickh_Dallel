@@ -3,6 +3,7 @@ import java.util.LinkedList;
 public interface IPetriNetwork {
 	
 	public LinkedList<Transition> firableTransitions();
+	
 	public boolean fire(Transition t);
 	
 	/**
@@ -11,16 +12,17 @@ public interface IPetriNetwork {
 	 * @param nbTokens number of tokens >= 0 
 	 * @return null
 	 */
-	void addPlace(int nbTokens);
-	void addTransition();
-	void addEnteringArc(int weight, Place p, Transition t);
-	void addExitingArc(int weight, Place p, Transition t);
-	void addZeroArc(Place p, Transition t);
-	void addEmptyingArc(Place p, Transition t);
-	boolean removeArc(Arc a);
-	boolean removeTransition(Transition t);
-	boolean removePlace(Place p);
-	void setTokensNumber(Place p, int nbTokens);
-	void setPoidsArc(Arc a, int weight);
+	public void addPlace(int nbTokens);
+	
+	public void addTransition();
+	public void addEnteringArc(int weight, Place p, Transition t);
+	public void addExitingArc(int weight, Place p, Transition t);
+	public void addZeroArc(Place p, Transition t);
+	public void addEmptyingArc(Place p, Transition t);
+	public boolean removeArc(Arc a);
+	public boolean removeTransition(Transition t);
+	public boolean removePlace(Place p);
+	public void setTokensNumber(Place p, int nbTokens);
+	public void setPoidsArc(Arc a, int weight);
 
 }
