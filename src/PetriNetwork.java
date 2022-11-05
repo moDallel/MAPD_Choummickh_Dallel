@@ -2,11 +2,14 @@ import java.util.LinkedList;
 
 public class PetriNetwork implements IPetriNetwork {
 	private LinkedList<Transition> transitionsList ;
-	private LinkedList<Arc> arcsList ;
-	private LinkedList<Place> placessList ;
-	private LinkedList<EnteringArc> enteringArcList;
-	private LinkedList<ExitingArc> exitingArcList;
+	private LinkedList<Place> placesList ;
+	private LinkedList<Arc> arcsList;
 	
+	public PetriNetwork() {
+		this.arcsList = new LinkedList<Arc>();
+		this.placesList = new LinkedList<Place>();
+		this.transitionsList = new LinkedList<Transition>();
+	}
 	@Override
 	public LinkedList<Transition> firableTransitions() {
 		LinkedList<Transition> firableTransitions = new LinkedList<Transition>() ;
@@ -24,12 +27,10 @@ public class PetriNetwork implements IPetriNetwork {
 			LinkedList<EnteringArc> myEnteringArc = t.getEnteringArcList();
 			LinkedList<ExitingArc> myExitingArc = t.getExitingArcList();
 			for ( EnteringArc a : myEnteringArc ) {
-				Place myPlace = a.getPlace() ;
-				myPlace.setTokensNumber(myPlace.getTokensNumber() - a.getWeight());
+				a.execute();
 			}
 			for ( ExitingArc a : myExitingArc ) {
-				Place myPlace = a.getPlace() ;
-				myPlace.setTokensNumber(myPlace.getTokensNumber() + a.getWeight());
+				a.execute();
 			}
 			return true;
 		}
@@ -40,15 +41,13 @@ public class PetriNetwork implements IPetriNetwork {
 
 	@Override
 	public void addPlace(int nbTokens) {
-		// TODO Auto-generated method stub
 		Place p = new Place(nbTokens);
-		placessList.add(p);
+		placesList.add(p);
 
 	}
 
 	@Override
 	public void addTransition() {
-		// TODO Auto-generated method stub
 		Transition t = new Transition();
 		transitionsList.add(t);
 
@@ -56,55 +55,134 @@ public class PetriNetwork implements IPetriNetwork {
 
 	@Override
 	public void addEnteringArc(int weight, Place p, Transition t) {
-		// TODO Auto-generated method stub
-
+		EnteringArc entArc = new EnteringArc(weight, p, t);
+		this.arcsList.add(entArc);
+		p.addArc(entArc);
+		t.addEntringArc(entArc);
 	}
 
 	@Override
 	public void addExitingArc(int weight, Place p, Transition t) {
-		// TODO Auto-generated method stub
+		ExitingArc exArc = new ExitingArc(weight, p, t);
+		this.arcsList.add(exArc);
+		p.addArc(exArc);
+		t.addExitingArc(exArc);
 	}
 
 	@Override
 	public void addZeroArc(Place p, Transition t) {
-		// TODO Auto-generated method stub
+		ZeroArc zeroArc = new ZeroArc(p, t);
+		this.arcsList.add(zeroArc);
+		p.addArc(zeroArc);
+		t.addEntringArc(zeroArc);
 
 	}
 
 	@Override
 	public void addEmptyingArc(Place p, Transition t) {
-		// TODO Auto-generated method stub
+		EmptyingArc emptyingArc = new EmptyingArc(p, t);
+		this.arcsList.add(emptyingArc);
+		p.addArc(emptyingArc);
+		t.addEntringArc(emptyingArc);
 
 	}
 
 	@Override
 	public boolean removeArc(Arc a) {
-		// TODO Auto-generated method stub
+		Place p = a.getPlace();
+		Transition t = a.getTransition();
+		p.removeArc(a);
+		if (a.isEnteringArc() ) {
+			t.removeEntringArc((EnteringArc)a);
+		}
+		else {
+			t.removeExitingArc((ExitingArc)a);
+		}
+		this.arcsList.remove(a);
 		return false;
 	}
 
 	@Override
 	public boolean removeTransition(Transition t) {
-		// TODO Auto-generated method stub
+		LinkedList<EnteringArc> entArcsList = t.getEnteringArcList();
+		for ( Arc arc : entArcsList ) {
+			this.removeArc(arc);
+		}
+		LinkedList<ExitingArc> exArcsList = t.getExitingArcList();
+		for ( Arc arc : exArcsList ) {
+			this.removeArc(arc);
+		}
+		this.transitionsList.remove(t);
 		return false;
 	}
 
 	@Override
 	public boolean removePlace(Place p) {
-		// TODO Auto-generated method stub
+		LinkedList<Arc> arcsList = p.getArcsList();
+		for ( Arc arc : arcsList ) {
+			this.removeArc(arc);
+		}
+		this.placesList.remove(p);
 		return false;
 	}
 
 	@Override
 	public void setTokensNumber(Place p, int nbTokens) {
-		// TODO Auto-generated method stub
-
+		p.setTokensNumber(nbTokens);
 	}
 
 	@Override
 	public void setPoidsArc(Arc a, int weight) {
-		// TODO Auto-generated method stub
+		a.setWeight(weight);
+	}
+	
+	public String toString() {
+		System.out.println("arcsList");
+		System.out.println(this.arcsList);
+		System.out.println("placesList");
+		System.out.println(this.placesList);
+		System.out.println("transitionsList");
+		System.out.println(this.transitionsList);
+		System.out.println("----------------------------");
+		return this.arcsList.toString();
 
+	}
+	
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+		PetriNetwork myPetriNetwork = new PetriNetwork() ;
+		myPetriNetwork.addPlace(3);
+		myPetriNetwork.addPlace(1);
+		myPetriNetwork.addTransition();
+		myPetriNetwork.addEnteringArc(1, myPetriNetwork.placesList.get(0), myPetriNetwork.transitionsList.get(0));
+		myPetriNetwork.addExitingArc(2, myPetriNetwork.placesList.get(1), myPetriNetwork.transitionsList.get(0));
+		System.out.println("arcsList");
+		System.out.println(myPetriNetwork.arcsList);
+		System.out.println("placesList");
+		System.out.println(myPetriNetwork.placesList);
+		System.out.println("transitionsList");
+		System.out.println(myPetriNetwork.transitionsList);
+		System.out.println("----------------------------");
+		LinkedList<Transition> fT = myPetriNetwork.firableTransitions();
+		System.out.println(fT.toString());
+		fT.get(0).fire();
+		System.out.println(myPetriNetwork.placesList.get(0).getTokensNumber());
+		System.out.println(myPetriNetwork.placesList.get(1).getTokensNumber());
+		fT = myPetriNetwork.firableTransitions();
+		System.out.println(fT.toString());
+		fT.get(0).fire();
+		System.out.println(myPetriNetwork.placesList.get(0).getTokensNumber());
+		System.out.println(myPetriNetwork.placesList.get(1).getTokensNumber());
+		fT = myPetriNetwork.firableTransitions();
+		System.out.println(fT.toString());
+		fT.get(0).fire();
+		System.out.println(myPetriNetwork.placesList.get(0).getTokensNumber());
+		System.out.println(myPetriNetwork.placesList.get(1).getTokensNumber());
+		fT = myPetriNetwork.firableTransitions();
+		System.out.println(fT.toString());
+		myPetriNetwork.transitionsList.get(0).fire();
+		System.out.println(myPetriNetwork.placesList.get(0).getTokensNumber());
+		System.out.println(myPetriNetwork.placesList.get(1).getTokensNumber());
 	}
 
 }

@@ -43,7 +43,12 @@ public class Transition {
 		}
 		else {
 			for (ExitingArc exArc : this.exitingArcList) {
-				exArc.excute();
+				exArc.execute();
+			}
+			for (EnteringArc entArc : this.enteringArcList) {
+				if ((!entArc.isZero()) && (!entArc.isEmptying()) ) {
+					entArc.execute();
+				}
 			}
 		}
 		

@@ -43,4 +43,10 @@ public class Place {
 		// TODO Auto-generated method stub
 		return this.tokensNumber;
 	}
+
+	public LinkedList<Arc> getArcsList() {
+		// TODO Auto-generated method stub
+		return this.arcsList;
+	}
+
 }
