@@ -168,6 +168,11 @@ public class PetriNetwork implements IPetriNetwork {
 		fT.get(0).fire();
 		System.out.println(myPetriNetwork.placesList.get(0).getTokensNumber());
 		System.out.println(myPetriNetwork.placesList.get(1).getTokensNumber());
+		myPetriNetwork.placesList.get(0).setTokensNumber(6);
+		System.out.println(myPetriNetwork.placesList.get(0).getTokensNumber());
+		System.out.println(myPetriNetwork.placesList.get(1).getTokensNumber());
+		myPetriNetwork.arcsList.get(0).setWeight(2);
+		System.out.println(myPetriNetwork.arcsList.get(0).getWeight());
 		fT = myPetriNetwork.firableTransitions();
 		System.out.println(fT.toString());
 		fT.get(0).fire();
@@ -183,6 +188,46 @@ public class PetriNetwork implements IPetriNetwork {
 		myPetriNetwork.transitionsList.get(0).fire();
 		System.out.println(myPetriNetwork.placesList.get(0).getTokensNumber());
 		System.out.println(myPetriNetwork.placesList.get(1).getTokensNumber());
+		myPetriNetwork.removePlace(myPetriNetwork.placesList.get(0));
+		System.out.println("arcsList");
+		System.out.println(myPetriNetwork.arcsList);
+		System.out.println("placesList");
+		System.out.println(myPetriNetwork.placesList);
+		System.out.println("transitionsList");
+		System.out.println(myPetriNetwork.transitionsList);
+		System.out.println("----------------------------");
+		myPetriNetwork.removeArc(myPetriNetwork.arcsList.get(0));
+		System.out.println("arcsList");
+		System.out.println(myPetriNetwork.arcsList);
+		System.out.println("placesList");
+		System.out.println(myPetriNetwork.placesList);
+		System.out.println("transitionsList");
+		System.out.println(myPetriNetwork.transitionsList);
+		System.out.println("----------------------------");
+		myPetriNetwork.addExitingArc(4, myPetriNetwork.placesList.get(0), myPetriNetwork.transitionsList.get(0));
+		System.out.println("arcsList");
+		System.out.println(myPetriNetwork.arcsList);
+		System.out.println("placesList");
+		System.out.println(myPetriNetwork.placesList);
+		System.out.println("transitionsList");
+		System.out.println(myPetriNetwork.transitionsList);
+		System.out.println("----------------------------");
+		myPetriNetwork.removeTransition(myPetriNetwork.transitionsList.get(0));
+		System.out.println("arcsList");
+		System.out.println(myPetriNetwork.arcsList);
+		System.out.println("placesList");
+		System.out.println(myPetriNetwork.placesList);
+		System.out.println("transitionsList");
+		System.out.println(myPetriNetwork.transitionsList);
+		System.out.println("----------------------------");
+		myPetriNetwork.removePlace(myPetriNetwork.placesList.get(0));
+		System.out.println("arcsList");
+		System.out.println(myPetriNetwork.arcsList);
+		System.out.println("placesList");
+		System.out.println(myPetriNetwork.placesList);
+		System.out.println("transitionsList");
+		System.out.println(myPetriNetwork.transitionsList);
+		System.out.println("----------------------------");
 	}
 
 }
