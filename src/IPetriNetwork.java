@@ -14,15 +14,22 @@ public interface IPetriNetwork {
 	 */
 	public void addPlace(int nbTokens);
 	
+	/**
+	 * Adds the transition.
+	 *
+	 */
 	public void addTransition();
+	
+	
 	public void addEnteringArc(int weight, Place p, Transition t);
 	public void addExitingArc(int weight, Place p, Transition t);
 	public void addZeroArc(Place p, Transition t);
 	public void addEmptyingArc(Place p, Transition t);
-	public boolean removeArc(Arc a);
-	public boolean removeTransition(Transition t);
-	public boolean removePlace(Place p);
-	public void setTokensNumber(Place p, int nbTokens);
+	public void removeArc(Arc a);
+	public void removeTransition(Transition t);
+	public void removePlace(Place p);
+	public void addTokens(Place p, int nbTokens);
+	public void removeTokens(Place p, int nbTokens);
 	public void setPoidsArc(Arc a, int weight);
 
 }

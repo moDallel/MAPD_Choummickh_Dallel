@@ -5,13 +5,27 @@ public class Arc {
 	private Transition transition;
 	
 	public Arc(int weight, Place place, Transition transition) {
-		this.weight = weight;
+		int w ;
+		if ( weight <= 0 ) {
+			System.out.println("weight must be >= 1 !!! this arc Weigth will be set to the default value 1 ! ");
+			w = 1 ;
+		}
+		else {
+			w = weight ;
+		}
+		this.weight = w;
 		this.place = place;
 		this.transition = transition;
 	}
 
-	public void setWeight(int neWeight) {
-		this.weight = neWeight;
+	public void setWeight(int newWeight) {
+		if (newWeight <= 0 ) {
+			System.out.println("weight must be >= 1 !!! this arc Weigth will be set to the default value 1 ! ");
+			this.weight = 1;
+		}
+		else {
+			this.weight = newWeight;
+		}
 	}
 	
 	public Place getPlace() {

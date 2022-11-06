@@ -5,7 +5,12 @@ public class Place {
 	private LinkedList<Arc> arcsList ; 
 	
 	public Place(int nbTokens) {
-		this.tokensNumber = nbTokens;
+		if (nbTokens < 0 ) {
+			this.tokensNumber = 0;
+		}
+		else {
+			this.tokensNumber = nbTokens;
+		}
 		this.arcsList = new LinkedList<Arc>();
 	}
 	
@@ -47,6 +52,28 @@ public class Place {
 	public LinkedList<Arc> getArcsList() {
 		// TODO Auto-generated method stub
 		return this.arcsList;
+	}
+
+	public void addTokens(int nbTokens) {
+		if (nbTokens <= 0  ) {
+			System.out.println(" nbTokens to add must be bigger than 0 !!! ");
+		}
+		else {
+			this.tokensNumber += nbTokens;
+		}
+	}
+	
+	public void removeTokens(int nbTokens) {
+		if (nbTokens <= 0  ) {
+			System.out.println(" nbTokens to remove must be bigger than 0 !!! ");
+		}
+		else if ( nbTokens > this.tokensNumber) {
+			System.out.println(" nbTokens to remove must be less than the current tokens number !!! Tokens number will be set to zero ! ");
+			this.tokensNumber = 0;
+		}
+		else {
+			this.tokensNumber -= nbTokens;
+		}
 	}
 
 }

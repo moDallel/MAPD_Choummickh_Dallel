@@ -53,6 +53,26 @@ public class Transition {
 		}
 		
 	}
+	
+	public boolean exist(boolean direction, Place p ) {
+		// true --> entringArc and false --> exitingArc  
+		if (direction) {
+			for (EnteringArc entArc : this.enteringArcList) {
+				if (entArc.getPlace() == p) {
+					return true;
+				}
+			}
+		}
+		else {
+			for (ExitingArc exArc : this.exitingArcList) {
+				if (exArc.getPlace() == p) {
+					return true;
+				}
+			}
+			
+		}
+		return false; 
+	}
 
 	public LinkedList<EnteringArc> getEnteringArcList() {
 		return this.enteringArcList;
