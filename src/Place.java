@@ -6,6 +6,7 @@ public class Place {
 	
 	public Place(int nbTokens) {
 		if (nbTokens < 0 ) {
+			System.out.println(" nbTokens to add must be bigger than 0 !!! tokensNumber will be set to the default value zero ! ");
 			this.tokensNumber = 0;
 		}
 		else {
@@ -15,7 +16,13 @@ public class Place {
 	}
 	
 	public void setTokensNumber(int nbTokens) {
-		this.tokensNumber = nbTokens;
+		if (nbTokens < 0 ) {
+			System.out.println(" nbTokens to add must be bigger than 0 !!! tokensNumber will be set to the default value zero ! ");
+			this.tokensNumber = 0;
+		}
+		else {
+			this.tokensNumber = nbTokens;
+		}
 	}
 	
 	public boolean currentNbTokensBiggerThan(int arcWeight) {
@@ -33,30 +40,19 @@ public class Place {
 	public boolean removeArc(Arc arc) {
 		return this.arcsList.remove(arc);
 	}
-	
-	public void incrementTokens() {
-		this.tokensNumber ++ ;
-	}
-	
-	public void decrementTokens() {
-		if (this.tokensNumber > 0) {
-			this.tokensNumber -- ;
-		}
-	}
 
 	public int getTokensNumber() {
-		// TODO Auto-generated method stub
 		return this.tokensNumber;
 	}
 
 	public LinkedList<Arc> getArcsList() {
-		// TODO Auto-generated method stub
 		return this.arcsList;
 	}
 
 	public void addTokens(int nbTokens) {
 		if (nbTokens <= 0  ) {
-			System.out.println(" nbTokens to add must be bigger than 0 !!! ");
+			System.out.println(" nbTokens to add must be bigger than 0 !!! The absolute value will be taken in consideration ! ");
+			this.tokensNumber += Math.abs(nbTokens);
 		}
 		else {
 			this.tokensNumber += nbTokens;
@@ -65,7 +61,8 @@ public class Place {
 	
 	public void removeTokens(int nbTokens) {
 		if (nbTokens <= 0  ) {
-			System.out.println(" nbTokens to remove must be bigger than 0 !!! ");
+			System.out.println(" nbTokens to remove must be bigger than 0 !!! The absolute value will be taken in consideration !  ");
+			this.removeTokens(Math.abs(nbTokens));
 		}
 		else if ( nbTokens > this.tokensNumber) {
 			System.out.println(" nbTokens to remove must be less than the current tokens number !!! Tokens number will be set to zero ! ");
