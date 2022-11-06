@@ -22,21 +22,8 @@ public class PetriNetwork implements IPetriNetwork {
 	}
 
 	@Override
-	public boolean fire(Transition t) {
-		if ( t.isFirable() ) {
-			LinkedList<EnteringArc> myEnteringArc = t.getEnteringArcList();
-			LinkedList<ExitingArc> myExitingArc = t.getExitingArcList();
-			for ( EnteringArc a : myEnteringArc ) {
-				a.execute();
-			}
-			for ( ExitingArc a : myExitingArc ) {
-				a.execute();
-			}
-			return true;
-		}
-		else {
-			return false;
-		}
+	public void fire(Transition t) {
+		t.fire();
 	}
 
 	@Override
@@ -233,7 +220,7 @@ public class PetriNetwork implements IPetriNetwork {
 	}
 
 	@Override
-	public void setPoidsArc(Arc a, int weight) {
+	public void setArcWeight(Arc a, int weight) {
 		if (a != null ) {
 			if (this.arcsList.contains(a)) {
 				if (a instanceof ZeroArc || a instanceof EmptyingArc) {

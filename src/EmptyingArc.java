@@ -3,7 +3,6 @@ public class EmptyingArc extends EnteringArc {
 
 	public EmptyingArc(Place place, Transition transition) {
 		super(0, place, transition);
-		// TODO Auto-generated constructor stub
 	}
 	
 	public boolean isEmptying() {

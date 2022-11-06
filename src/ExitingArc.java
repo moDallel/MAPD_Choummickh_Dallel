@@ -10,9 +10,7 @@ public class ExitingArc extends Arc {
 	}
 
 	public void execute() {
-
-			int n = super.getPlace().getTokensNumber();
-			super.getPlace().setTokensNumber(super.getWeight() + n);
+			super.getPlace().addTokens(super.getWeight());
 	}
 	
 }

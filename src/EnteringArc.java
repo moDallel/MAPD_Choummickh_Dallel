@@ -2,7 +2,6 @@ public class EnteringArc extends Arc {
 	
 	public EnteringArc(int weight, Place place, Transition transition) {
 		super(weight, place, transition);
-		// TODO Auto-generated constructor stub
 	}
 	
 	public boolean isEnteringArc() {
@@ -18,15 +17,11 @@ public class EnteringArc extends Arc {
 	}
 	
 	public void execute() {
-		int newCurrentTokens = super.getPlace().getTokensNumber() - super.getWeight();
-		super.getPlace().setTokensNumber(newCurrentTokens);		
+		super.getPlace().removeTokens(super.getWeight());		
 	}
 
-
-
-	public Transition getTransition() {
-		// TODO Auto-generated method stub
-		return super.getTransition();
+	public boolean isActive() {
+		
+		return ( super.getPlace().currentNbTokensBiggerThan(super.getWeight())) ;
 	}
-
 }

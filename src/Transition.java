@@ -28,9 +28,7 @@ public class Transition {
 	
 	public boolean isFirable() {
 		for (EnteringArc entArc : this.enteringArcList) {
-			Place myPlace = entArc.getPlace();
-			int weight = entArc.getWeight(); 
-			if (!myPlace.currentNbTokensBiggerThan(weight)){
+			if (! entArc.isActive()){
 				return false ;
 			}
 		}
@@ -39,16 +37,14 @@ public class Transition {
 	
 	public void fire() {
 		if (this.isFirable() == false) {
-			return;
+			System.out.println("this transition is not firable");
 		}
 		else {
 			for (ExitingArc exArc : this.exitingArcList) {
 				exArc.execute();
 			}
 			for (EnteringArc entArc : this.enteringArcList) {
-				if ((!entArc.isZero()) && (!entArc.isEmptying()) ) {
 					entArc.execute();
-				}
 			}
 		}
 		
