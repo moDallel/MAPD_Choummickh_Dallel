@@ -1,6 +1,8 @@
+package PetriNetwork;
+
 public class Arc {
 	
-	private int weight = 1; //valeur de l'arc qui vaut 1 par défaut
+	private int weight;
 	private Place place;
 	private Transition transition;
 	
@@ -47,5 +49,5 @@ public class Arc {
 	public boolean isExitingArc() {
 		return false;
 	}
-	
+
 }

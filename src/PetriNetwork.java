@@ -1,4 +1,9 @@
+package PetriNetwork;
+
 import java.util.LinkedList;
+
+import exceptions.*;
+
 
 public class PetriNetwork implements IPetriNetwork {
 	private LinkedList<Transition> transitionsList ;
@@ -22,8 +27,16 @@ public class PetriNetwork implements IPetriNetwork {
 	}
 
 	@Override
-	public void fire(Transition t) {
-		t.fire();
+	public void fire(Transition t) throws NullObjectException,NotFirableTransitionException {
+		if (t==null) {
+			throw new NullObjectException("The transition doesn't have to be a null object !");
+		}
+		else if (!t.isFirable()) {
+			throw new NotFirableTransitionException("The given transition is not firable");
+		}
+		else{
+			t.fire();
+		}
 	}
 
 	@Override
@@ -40,7 +53,7 @@ public class PetriNetwork implements IPetriNetwork {
 	}
 
 	@Override
-	public void addEnteringArc(int weight, Place p, Transition t) {
+	public void addEnteringArc(int weight, Place p, Transition t) throws NullObjectException,ExistantArcException {
 		if ( p != null && t != null  ) {
 			if ( ! t.exist(true, p) ) {
 				EnteringArc entArc = new EnteringArc(weight, p, t);
@@ -49,17 +62,21 @@ public class PetriNetwork implements IPetriNetwork {
 				t.addEntringArc(entArc);
 			}
 			else {
-				System.out.println(" This arc already exist !!! ");
+				throw new ExistantArcException("this arc is already existing!") ;
 			}
 
 		}
 		else {
-			System.out.println(" Argument place or transition is null !!! ");
+			throw new NullObjectException(" Argument place or transition is null ! ");
 		}
+	}
+	
+	public void addEnteringArc(Place p, Transition t) throws NullObjectException,ExistantArcException {
+		this.addEnteringArc(1, p, t);
 	}
 
 	@Override
-	public void addExitingArc(int weight, Place p, Transition t) {
+	public void addExitingArc(int weight, Place p, Transition t) throws NullObjectException,ExistantArcException {
 		if ( p != null && t != null  ) {
 			if ( ! t.exist(false, p) ) {
 				ExitingArc exArc = new ExitingArc(weight, p, t);
@@ -68,17 +85,21 @@ public class PetriNetwork implements IPetriNetwork {
 				t.addExitingArc(exArc);
 			}
 			else {
-				System.out.println(" This arc already exist !!! ");
+				throw new ExistantArcException("this arc is already existing!") ;
 			}
 
 		}
 		else {
-			System.out.println(" Argument place or transition is null !!! ");
+			throw new NullObjectException(" Argument place or transition is null ! ");
 		}
+	}
+	
+	public void addExitingArc(Place p, Transition t) throws NullObjectException,ExistantArcException {
+		this.addExitingArc(1, p, t);
 	}
 
 	@Override
-	public void addZeroArc(Place p, Transition t) {
+	public void addZeroArc(Place p, Transition t) throws NullObjectException,ExistantArcException{
 		if ( p != null && t != null  ) {
 			if ( ! t.exist(true, p) ) {
 				ZeroArc zeroArc = new ZeroArc(p, t);
@@ -87,19 +108,19 @@ public class PetriNetwork implements IPetriNetwork {
 				t.addEntringArc(zeroArc);
 			}
 			else {
-				System.out.println(" This arc already exist !!! ");
+				throw new ExistantArcException("this arc is already existing!") ;
 			}
 
 		}
 		else {
-			System.out.println(" Argument place or transition is null !!! ");
+			throw new NullObjectException(" Argument place or transition is null ! ");
 		}
 	}
 
 
 
 	@Override
-	public void addEmptyingArc(Place p, Transition t) {
+	public void addEmptyingArc(Place p, Transition t) throws NullObjectException,ExistantArcException {
 		if ( p != null && t != null  ) {
 			if ( ! t.exist(true, p) ) {
 				EmptyingArc emptyingArc = new EmptyingArc(p, t);
@@ -108,20 +129,19 @@ public class PetriNetwork implements IPetriNetwork {
 				t.addEntringArc(emptyingArc);
 			}
 			else {
-				System.out.println(" This arc already exist !!! ");
+				throw new ExistantArcException("this arc is already existing!") ;
 			}
 
 		}
 		else {
-			System.out.println(" Argument place or transition is null !!! ");
+			throw new NullObjectException(" Argument place or transition is null ! ");
 		}
 	}
 
 
 	@Override
-	public void removeArc(Arc a) {
+	public void removeArc(Arc a) throws NullObjectException {
 		if (a != null ) {
-			if (this.arcsList.contains(a)) {
 				Place p = a.getPlace();
 				Transition t = a.getTransition();
 				p.removeArc(a);
@@ -132,21 +152,16 @@ public class PetriNetwork implements IPetriNetwork {
 					t.removeExitingArc((ExitingArc)a);
 				}
 				this.arcsList.remove(a);
-			}
-			else {
-				System.out.println(" This arc does not exist in the arc list !!! ");
-			}
 		}
 		else {
-			System.out.println(" Argument arc is null !!! ");
+			throw new NullObjectException(" Argument arc is null ! ");
 		}
 
 	}
 
 	@Override
-	public void removeTransition(Transition t) {
+	public void removeTransition(Transition t) throws NullObjectException {
 		if (t != null ) {
-			if (this.transitionsList.contains(t)) {
 				LinkedList<EnteringArc> entArcsList = t.getEnteringArcList();
 				for ( Arc arc : entArcsList ) {
 					this.removeArc(arc);
@@ -156,185 +171,119 @@ public class PetriNetwork implements IPetriNetwork {
 					this.removeArc(arc);
 				}
 				this.transitionsList.remove(t);
-			}
-			else {
-				System.out.println(" This transition does not exist in the arc list !!! ");
-			}
 		}
 		else {
-			System.out.println(" Argument transition is null !!! ");
+			throw new NullObjectException(" Argument transition is null ! ");
 		}
 
 	}
 
 	@Override
-	public void removePlace(Place p) {
+	public void removePlace(Place p) throws NullObjectException {
 		if (p != null ) {
-			if (this.placesList.contains(p)) {
 				LinkedList<Arc> arcsList = p.getArcsList();
 				for ( Arc arc : arcsList ) {
 					this.removeArc(arc);
 				}
 				this.placesList.remove(p);
-			}
-			else {
-				System.out.println(" This place does not exist in the arc list !!! ");
-			}
 		}
 		else {
-			System.out.println(" Argument place is null !!! ");
+			throw new NullObjectException(" Argument place is null ! ");
 		}
 
 	}
 
 	@Override
-	public void addTokens(Place p, int nbTokens) {
+	public void addTokens(Place p, int nbTokens) throws InexistantPlaceException,NullObjectException {
 		if (p != null ) {
 			if (this.placesList.contains(p)) {
 				p.addTokens(nbTokens);
 			}
 			else {
-				System.out.println(" This place does not exist in the arc list !!! ");
+				throw new InexistantPlaceException(" This place does not exist in the arc list ! ");
 			}
 		}
 		else {
-			System.out.println(" Argument place is null !!! ");
+			throw new NullObjectException(" Argument place is null ! ");
 		}
 
 	}
 	
 	@Override
-	public void removeTokens(Place p, int nbTokens) {
+	public void removeTokens(Place p, int nbTokens) throws InexistantPlaceException,NullObjectException {
 		if (p != null ) {
 			if (this.placesList.contains(p)) {
 				p.removeTokens(nbTokens);
 			}
 			else {
-				System.out.println(" This place does not exist in the arc list !!! ");
+				throw new InexistantPlaceException(" This place does not exist in the arc list ! ");
 			}
 		}
 		else {
-			System.out.println(" Argument place is null !!! ");
+			throw new NullObjectException(" Argument place is null ! ");
 		}
 		
 	}
 
 	@Override
-	public void setArcWeight(Arc a, int weight) {
+	public void setArcWeight(Arc a, int weight) throws InexistantArcException,NullObjectException,NoAttributeWeightException {
 		if (a != null ) {
 			if (this.arcsList.contains(a)) {
 				if (a instanceof ZeroArc || a instanceof EmptyingArc) {
-					System.out.println(" ZeroArc/EmtyingArc has no attribute weight !!! ");
+					throw new NoAttributeWeightException(" ZeroArc/EmtyingArc has no attribute weight ! ");
 				}
 				else {
 					a.setWeight(weight);
 				}
 			}
 			else {
-				System.out.println(" This arc does not exist in the arc list !!! ");
+				throw new InexistantArcException(" This arc does not exist in the arc list !!! ");
 			}
 		}
 		else {
-			System.out.println(" Argument arc is null !!! ");
+			throw new NullObjectException(" Argument arc is null !!! ");
 		}
 
 	}
 	
 	public String toString() {
-		System.out.println("arcsList");
-		System.out.println(this.arcsList);
-		System.out.println("placesList");
-		System.out.println(this.placesList);
-		System.out.println("transitionsList");
-		System.out.println(this.transitionsList);
-		System.out.println("----------------------------");
-		return this.arcsList.toString();
-
+		String res = "";
+		res += "Réseau de Petri \n";
+		res += placesList.size() + " " +"place(s) \n";
+		res += transitionsList.size() + " "+"transition(s) \n";
+		res += arcsList.size() + " "+"arc(s) \n" ;
+		res += "--------------------------------------- \n";
+		res += "Liste des places : \n";
+		for (int i = 0; i < placesList.size(); i++) {
+			Place place = placesList.get(i);
+			res += (i+1) + place.toString();
+		}
+		res += "--------------------------------------- \n";
+		res += "Liste des transitions : \n" ;
+		for (int i = 0; i < transitionsList.size(); i++) {
+			Transition transition = transitionsList.get(i);
+			res += (i+1)+ transition.toString();
+		}
+		res += "--------------------------------------- \n";
+		res += "Liste des arcs : \n" ;
+		for (int i = 0; i < arcsList.size(); i++) {
+			Arc arc = arcsList.get(i);
+			res += (i+1) + arc.toString();
+		}
+		return res;
 	}
 	
-	public static void main(String[] args) {
-		// TODO Auto-generated method stub
-		PetriNetwork myPetriNetwork = new PetriNetwork() ;
-		myPetriNetwork.addPlace(3);
-		myPetriNetwork.addPlace(1);
-		myPetriNetwork.addTransition();
-		myPetriNetwork.addEnteringArc(1, myPetriNetwork.placesList.get(0), myPetriNetwork.transitionsList.get(0));
-		System.out.println(myPetriNetwork.arcsList.get(0).getPlace() == myPetriNetwork.placesList.get(0) );
-		System.out.println(myPetriNetwork.arcsList.get(0) instanceof EnteringArc);
-		myPetriNetwork.addExitingArc(2, myPetriNetwork.placesList.get(1), myPetriNetwork.transitionsList.get(0));
-		System.out.println("arcsList");
-		System.out.println(myPetriNetwork.arcsList);
-		System.out.println("placesList");
-		System.out.println(myPetriNetwork.placesList);
-		System.out.println("transitionsList");
-		System.out.println(myPetriNetwork.transitionsList);
-		System.out.println("----------------------------");
-		LinkedList<Transition> fT = myPetriNetwork.firableTransitions();
-		System.out.println(fT.toString());
-		fT.get(0).fire();
-		System.out.println(myPetriNetwork.placesList.get(0).getTokensNumber());
-		System.out.println(myPetriNetwork.placesList.get(1).getTokensNumber());
-		myPetriNetwork.placesList.get(0).setTokensNumber(6);
-		System.out.println(myPetriNetwork.placesList.get(0).getTokensNumber());
-		System.out.println(myPetriNetwork.placesList.get(1).getTokensNumber());
-		myPetriNetwork.arcsList.get(0).setWeight(2);
-		System.out.println(myPetriNetwork.arcsList.get(0).getWeight());
-		fT = myPetriNetwork.firableTransitions();
-		System.out.println(fT.toString());
-		fT.get(0).fire();
-		System.out.println(myPetriNetwork.placesList.get(0).getTokensNumber());
-		System.out.println(myPetriNetwork.placesList.get(1).getTokensNumber());
-		fT = myPetriNetwork.firableTransitions();
-		System.out.println(fT.toString());
-		fT.get(0).fire();
-		System.out.println(myPetriNetwork.placesList.get(0).getTokensNumber());
-		System.out.println(myPetriNetwork.placesList.get(1).getTokensNumber());
-		fT = myPetriNetwork.firableTransitions();
-		System.out.println(fT.toString());
-		myPetriNetwork.transitionsList.get(0).fire();
-		System.out.println(myPetriNetwork.placesList.get(0).getTokensNumber());
-		System.out.println(myPetriNetwork.placesList.get(1).getTokensNumber());
-		myPetriNetwork.removePlace(myPetriNetwork.placesList.get(0));
-		System.out.println("arcsList");
-		System.out.println(myPetriNetwork.arcsList);
-		System.out.println("placesList");
-		System.out.println(myPetriNetwork.placesList);
-		System.out.println("transitionsList");
-		System.out.println(myPetriNetwork.transitionsList);
-		System.out.println("----------------------------");
-		myPetriNetwork.removeArc(myPetriNetwork.arcsList.get(0));
-		System.out.println("arcsList");
-		System.out.println(myPetriNetwork.arcsList);
-		System.out.println("placesList");
-		System.out.println(myPetriNetwork.placesList);
-		System.out.println("transitionsList");
-		System.out.println(myPetriNetwork.transitionsList);
-		System.out.println("----------------------------");
-		myPetriNetwork.addExitingArc(4, myPetriNetwork.placesList.get(0), myPetriNetwork.transitionsList.get(0));
-		System.out.println("arcsList");
-		System.out.println(myPetriNetwork.arcsList);
-		System.out.println("placesList");
-		System.out.println(myPetriNetwork.placesList);
-		System.out.println("transitionsList");
-		System.out.println(myPetriNetwork.transitionsList);
-		System.out.println("----------------------------");
-		myPetriNetwork.removeTransition(myPetriNetwork.transitionsList.get(0));
-		System.out.println("arcsList");
-		System.out.println(myPetriNetwork.arcsList);
-		System.out.println("placesList");
-		System.out.println(myPetriNetwork.placesList);
-		System.out.println("transitionsList");
-		System.out.println(myPetriNetwork.transitionsList);
-		System.out.println("----------------------------");
-		myPetriNetwork.removePlace(myPetriNetwork.placesList.get(0));
-		System.out.println("arcsList");
-		System.out.println(myPetriNetwork.arcsList);
-		System.out.println("placesList");
-		System.out.println(myPetriNetwork.placesList);
-		System.out.println("transitionsList");
-		System.out.println(myPetriNetwork.transitionsList);
-		System.out.println("----------------------------");
+	// those methodes are used for tests.
+	public LinkedList<Transition> getTransitionsList() {
+		return this.transitionsList;
 	}
-
-
+	
+	public LinkedList<Arc> getArcsList() {
+		return this.arcsList;
+	}
+	
+	public LinkedList<Place> getPlacesList() {
+		return this.placesList;
+	}
+	
 }

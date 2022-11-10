@@ -1,3 +1,5 @@
+package PetriNetwork;
+
 import java.util.LinkedList;
 
 public class Transition {
@@ -69,6 +71,26 @@ public class Transition {
 		}
 		return false; 
 	}
+	
+	public String toString() {
+		String res = "";
+	    int nbZeroArc = 0;
+	    int nbEmptyingArc = 0;
+	    int nbSimpleEnteringArc = 0;
+		for (Arc arc : this.enteringArcList ) {
+					if (((EnteringArc)arc).isZero()) {
+						nbZeroArc++;
+					}
+					else if (((EnteringArc)arc).isEmptying()) {
+						nbEmptyingArc++;
+					}
+					else {
+						nbSimpleEnteringArc++;
+					}
+		}
+		res += " : "+"transition, "+this.enteringArcList.size()+" arc(s) entrant(s) dont " + nbSimpleEnteringArc + " simple(s), "+ nbZeroArc + " zéro arc(s), " + nbEmptyingArc +" arc(s) videur(s) et " +this.exitingArcList.size()+" arc(s) sortant(s) \n";
+		return res;
+	}
 
 	public LinkedList<EnteringArc> getEnteringArcList() {
 		return this.enteringArcList;
@@ -77,4 +99,5 @@ public class Transition {
 	public LinkedList<ExitingArc> getExitingArcList() {
 		return this.exitingArcList;
 	}
+	
 }
